@@ -15,13 +15,17 @@ Given these simplifications, a psalm can be representated as follows:
 
 1. The psalm number
 2. An optional introduction (note:  this was "verse 1" in the Masoretic rendering, but all other translations begin verse 1 with the actual poetry, which is what my representation does.)  The introductory text may have footnotes, or use the Tetragrammaton, but has no other typographical oddities.
-3. An array of lines divided into verses.  Each line is either:
-  1. a blank line
-  2. a line of text with indentation.  The text has no typographical oddities except the Tetragrammaton, or a footnote anchor.
-  3. a subheading, used only in Ps. 119 for the letters of the Hebrew alphabet.
+3. An array of lines divided into verses.  Each line has an indent, text, and an optional spacing afterward
 4. An array of footnotes.  These must have a one-to-one correspondence with the anchors in the verse lines above.  Inside the footnotes, many translations italicize alternate readings, although quotations are what my format uses.
 
-I represented this psalm structure in scala using a class.  One nice feature of Scala allowed me quite easily to implement a very nice toString method, which produces output such as this example, Psalm 3 ESV:
+The text in the introduction, line text, and footnotes has the following properties:
+
+* The Tetragrammaton is represented by the text "LORD".
+* Typographical special characters are represented by simplified characters, i.e., a typewriter-style double quote, single quote, and '--' for an em-dash.
+* Translators' reference to original language words in the footnotes is surrounded by <angle brackets>.  Most modern translations use italics for this.
+* Footnote anchors are represented by an asterisk (*).
+
+I represented this psalm structure in scala using a case class.  One nice feature of Scala allowed me quite easily to implement a very nice toString method, which produces output such as this example, Psalm 3 ESV:
 
 ````
 Psalm 3
