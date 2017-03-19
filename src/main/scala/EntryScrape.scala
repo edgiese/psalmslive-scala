@@ -5,10 +5,6 @@ import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.model._
 import psalms._
-import org.json4s.JsonDSL._
-import org.json4s._
-import org.json4s.native.JsonMethods._
-
 /**
   * scraper routines for reading psalm structure from Bible Gateway's format
   */
@@ -197,17 +193,14 @@ object EntryScrape {
   def main(args: Array[String]): Unit = {
     val baseFileName = "/home/edgiese/psalms"
     val browser = JsoupBrowser()
-    val psalms = for (n <- 1 to 150) yield {
+    val psalmSeq = for (n <- 1 to 150) yield {
       val doc = browser.parseFile(baseFileName + f"/psalm$n%03d.html")
       val ps = scrapePsalm(doc, n)
-      println(ps)
-      println("---------------")
+//      println(ps)
+//      println("---------------")
       ps
     }
-    val json = psalmsToJson(psalms.toList)
-    val writer = new PrintWriter(new File("test.json"))
-    writer.write(pretty(render(json)))
-    writer.close()
+    psalmsToJsonFile(Psalms("ESV", psalmSeq.toList))
   }
 
   // entry to save the psalms into files
@@ -219,23 +212,6 @@ object EntryScrape {
     writer.close()
   }
 
-  def psalmsToJson(psalms: List[Psalm]): JObject = {
-    "psalms" -> psalms.map(ps =>
-      ("number" -> ps.number) ~
-        ("description" -> ps.description) ~
-        ("verses" -> ps.verses.map(v =>
-          ("number" -> v.verseNum) ~
-            ("lines" -> v.lines.map(line =>
-              ("indent" -> line.indent) ~
-                ("text" -> line.text) ~
-                ("after" -> line.after)
-              )
-            )
-          )
-        ) ~
-        ("footnotes" -> ps.footnotes)
-    )
-  }
 }
 
 
